@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi espacio personal</title>
+<style>
+:root{--ink:#24312c;--muted:#6d7972;--paper:#f7f7f2;--card:#fff;--line:#e3e8e1;--accent:#557a68;--soft:#e8efe8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}
+.shell{max-width:1050px;margin:auto;padding:28px 20px 60px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:38px}
+.brand{font-weight:750;letter-spacing:-.04em;font-size:1.05rem}
+.pill{border:1px solid var(--line);border-radius:999px;padding:7px 12px;color:var(--muted);font-size:.85rem}
+.hero{background:#e8e8df;border-radius:26px;padding:clamp(24px,5vw,54px);display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center}
+.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:.75rem;font-weight:700;color:#657268}
+h1{font-size:clamp(2.4rem,6vw,4.7rem);line-height:.98;letter-spacing:-.065em;margin:12px 0 18px}
+.hero p{max-width:440px;color:#536057;margin:0}
+.hero-art{min-height:220px;border-radius:20px;background:linear-gradient(145deg,#c5d2c2,#e2d9c9);display:flex;align-items:center;justify-content:center;color:#46614e;font-size:5rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 18px}
+nav button{border:1px solid var(--line);background:var(--card);padding:10px 16px;border-radius:999px;cursor:pointer;color:var(--muted)}
+nav button.active{background:var(--ink);color:white;border-color:var(--ink)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:26px 0 14px}
+h2{font-size:1.55rem;letter-spacing:-.04em;margin:0}
+.note{font-size:.9rem;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;min-height:150px}
+.card .icon{font-size:1.5rem;margin-bottom:10px}
+.card h3{margin:0 0 6px;font-size:1.05rem}
+.card p{margin:0;color:var(--muted);font-size:.92rem}
+.upload{margin-top:20px;background:var(--soft);border-radius:18px;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.upload strong{display:block}
+.upload span{color:var(--muted);font-size:.9rem}
+.upload input{max-width:230px}
+.file-list{margin-top:12px;display:grid;gap:8px}
+.file{padding:10px 14px;border:1px solid var(--line);background:white;border-radius:12px;display:flex;justify-content:space-between;gap:12px;overflow-wrap:anywhere}
+footer{margin-top:34px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding-top:18px}
+@media(max-width:700px){.hero{grid-template-columns:1fr}.hero-art{min-height:130px}.cards{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column}.upload{align-items:start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header><div class="brand">✳ Mi espacio</div><div class="pill">Borrador personal · No publicado</div></header>
+<section class="hero">
+  <div><div class="eyebrow">Un rincón propio</div><h1>Hola, soy<br>Eva Fernandez</h1><p>Un espacio para guardar mis recuerdos, compartir mis ideas y reunir todo lo que voy creando.</p></div>
+  <div class="hero-art" aria-label="Ilustración decorativa">✿</div>
+</section>
+<nav aria-label="Secciones">
+  <button class="active" data-section="inicio">Inicio</button>
+  <button data-section="fotos">📷 Fotos</button>
+  <button data-section="textos">✍️ Textos</button>
+  <button data-section="videos">▶ Vídeos</button>
+  <button data-section="universidad">🎓 Universidad</button>
+</nav>
+<section id="content">
+  <div class="section-head"><div><div class="eyebrow">Tu biblioteca</div><h2>Todo en su sitio</h2></div><div class="note">Elige una sección para empezar</div></div>
+  <div class="cards">
+    <article class="card"><div class="icon">📷</div><h3>Fotos</h3><p>Álbumes, viajes y pequeños momentos.</p></article>
+    <article class="card"><div class="icon">✍️</div><h3>Textos</h3><p>Ideas, notas y escritos personales.</p></article>
+    <article class="card"><div class="icon">🎓</div><h3>Universidad</h3><p>Trabajos y proyectos académicos.</p></article>
+  </div>
+</section>
+<div class="upload">
+  <div><strong>Añadir archivos a esta vista</strong><span>Prueba a seleccionar fotos, vídeos o documentos. Se mostrarán aquí temporalmente.</span></div>
+  <input id="picker" type="file" multiple accept="image/*,video/*,.pdf,.doc,.docx,.ppt,.pptx,.txt">
+</div>
+<div id="files" class="file-list" aria-live="polite"></div>
+<footer>Maqueta visual. Los archivos seleccionados solo se muestran en esta sesión y no se suben ni se guardan. Antes de publicarla, habrá que configurar un acceso privado real y almacenamiento protegido.</footer>
+</div>
+<script>
+const content=document.getElementById('content');
+const buttons=[...document.querySelectorAll('nav button')];
+const sections={
+ inicio:`<div class="section-head"><div><div class="eyebrow">Tu biblioteca</div><h2>Todo en su sitio</h2></div><div class="note">Elige una sección para empezar</div></div><div class="cards"><article class="card"><div class="icon">📷</div><h3>Fotos</h3><p>Álbumes, viajes y pequeños momentos.</p></article><article class="card"><div class="icon">✍️</div><h3>Textos</h3><p>Ideas, notas y escritos personales.</p></article><article class="card"><div class="icon">🎓</div><h3>Universidad</h3><p>Trabajos y proyectos académicos.</p></article></div>`,
+ fotos:`<div class="section-head"><div><div class="eyebrow">Recuerdos</div><h2>Mis fotografías</h2></div><div class="note">Álbumes y momentos especiales</div></div><div class="cards"><article class="card"><div class="icon">🌿</div><h3>Viajes</h3><p>Fotos de lugares que he conocido.</p></article><article class="card"><div class="icon">☀️</div><h3>Momentos</h3><p>Pequeños recuerdos del día a día.</p></article></div>`,
+ textos:`<div class="section-head"><div><div class="eyebrow">Ideas</div><h2>Mis textos</h2></div><div class="note">Escritos, notas y reflexiones</div></div><div class="cards"><article class="card"><div class="icon">📝</div><h3>Notas personales</h3><p>Un lugar para guardar ideas y borradores.</p></article><article class="card"><div class="icon">📚</div><h3>Lecturas</h3><p>Reseñas, citas y cosas que me inspiran.</p></article></div>`,
+ videos:`<div class="section-head"><div><div class="eyebrow">En movimiento</div><h2>Mis vídeos</h2></div><div class="note">Vídeos y proyectos audiovisuales</div></div><div class="cards"><article class="card"><div class="icon">▶</div><h3>Vídeos personales</h3><p>Clips y recuerdos que quiero conservar.</p></article><article class="card"><div class="icon">🎬</div><h3>Proyectos</h3><p>Vídeos creativos o trabajos audiovisuales.</p></article></div>`,
+ universidad:`<div class="section-head"><div><div class="eyebrow">Aprendizaje</div><h2>Universidad</h2></div><div class="note">Trabajos y proyectos académicos</div></div><div class="cards"><article class="card"><div class="icon">📄</div><h3>Trabajos</h3><p>Documentos finales y entregas.</p></article><article class="card"><div class="icon">🗂️</div><h3>Proyectos</h3><p>Material, presentaciones y recursos.</p></article><article class="card"><div class="icon">📌</div><h3>Apuntes</h3><p>Notas para consultar y organizar.</p></article></div>`
+};
+buttons.forEach(btn=>btn.addEventListener('click',()=>{buttons.forEach(b=>b.classList.toggle('active',b===btn));content.innerHTML=sections[btn.dataset.section];document.getElementById('files').innerHTML='';}));
+document.getElementById('picker').addEventListener('change',e=>{const out=document.getElementById('files');out.innerHTML='';[...e.target.files].forEach(file=>{const row=document.createElement('div');row.className='file';const name=document.createElement('span');name.textContent=file.name;const size=document.createElement('span');size.className='note';size.textContent=(file.size/1024/1024).toFixed(2)+' MB';row.append(name,size);out.append(row);});});
+</script>
+</body>
+</html>
